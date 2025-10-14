@@ -6,13 +6,18 @@ import glob
 import numpy as np
 import time
 
-app = Flask(_name_)
+app = Flask(__name__)
 
-cam_ip="<The ip returned by pi>"
+# CONFIGURATION - Update these values before running
+# Step 1: Run stream.py on Raspberry Pi and note the IP address
+# Step 2: Update cam_ip with the URL from Raspberry Pi (example: "http://192.168.1.100:8080")
+cam_ip = "http://<RASPBERRY_PI_IP>:8080"  # Replace <RASPBERRY_PI_IP> with actual IP
+
+# Step 3: Update images_path with the folder containing known face images
+# Each image file should be named after the person (e.g., "john_doe.jpg")
+images_path = "images"  # Path to folder with known face images
 
 camera = cv2.VideoCapture(cam_ip)
-
-images_path="<path to the folder which contains the face images>"
 known_face_encodings = []
 known_face_names = []
 frame_resizing = 0.25
@@ -131,11 +136,21 @@ def index():
     </html>
     '''
 
-if _name_ == '_main_':
+if __name__ == '__main__':
+    print("\n" + "="*60)
+    print("FACE RECOGNITION CLIENT")
+    print("="*60)
+    print(f"Configuration:")
+    print(f"  - Camera IP: {cam_ip}")
+    print(f"  - Images folder: {images_path}")
+    print("="*60)
+    
+    # Load known faces
     load_encoding_images(images_path)
-    print("\n=== Starting Face Recognition Server ===")
-    print("Access the stream at: http://0.0.0.0:5000")
-    print("Make sure 'images' folder exists with face images")
-    print("========================================\n")
+    
+    print("\nStarting Face Recognition Server...")
+    print("Access the stream at: http://localhost:5000")
+    print("Green box = Known face | Red box = Unknown face")
+    print("="*60 + "\n")
     
     app.run(host='0.0.0.0', port=5000)
