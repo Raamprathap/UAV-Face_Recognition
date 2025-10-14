@@ -47,7 +47,7 @@ def gen_frames():
                    b'Content-Type: image/jpeg\r\n\r\n' + 
                    buffer.tobytes() + b'\r\n')
 
-@app.route('/video')
+@app.route('/')
 def video():
     return Response(gen_frames(), 
                     mimetype='multipart/x-mixed-replace; boundary=frame')
